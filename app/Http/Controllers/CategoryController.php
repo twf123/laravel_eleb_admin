@@ -7,6 +7,13 @@ use App\Handlers\ImageUploadHandler;
 class CategoryController extends Controller
 {
     //添加商户分类
+    public function __construct()
+    {
+        $this->middleware('auth',[
+            'except'=>[]
+        ]);
+    }
+
     public function create(){
         return view('category.create');
     }
