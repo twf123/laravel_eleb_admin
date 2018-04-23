@@ -6,18 +6,20 @@ use App\Member;
 use App\Member_info;
 use Illuminate\Http\Request;
 use App\Category;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use OSS\Core\OssException;
 
 class MemberController extends Controller
 {
     //添加商户信息
-    public function __construct()
-    {
-        $this->middleware('auth',[
-            'except'=>[]
-        ]);
-    }
+//    public function __construct()
+//    {
+//        $this->middleware('auth',[
+//            'except'=>[]
+//        ]);
+//    }
     public function create(){
         $cats  =  Category::all();
         return view('member.create',compact('cats'));
@@ -49,19 +51,13 @@ class MemberController extends Controller
             ]);
 
         //文件上传的保存
-        $result = $handler->save($request->shop_img,'shop',0);
-        if ($result){
-            $fileName = url(Storage::url($result['path']));
-        }else{
-            $fileName = '';
-        }
         //保存商品店主信息
-        DB::transaction(function () use ($request,$fileName) {
+        DB::transaction(function () use ($request) {
 
-            $member_infos=Member_info::create(
+            $member_infos = Member_info::create(
                 [
                     'shop_name'=>$request->shop_name,
-                    'shop_img'=>$fileName,
+                    'shop_img'=>'https://tanzong-eleb-shop.oss-cn-beijing.aliyuncs.com/'.$request->shop_img,
                     'brand'=>$request->brand,
                     'on_time'=>$request->on_time,
                     'fengniao'=>$request->fengniao,
@@ -84,9 +80,7 @@ class MemberController extends Controller
                     'password'=>bcrypt($request->password),
                     'status'=>'1',
                     'email'=>$request->email,
-
-//                    最后插入的id
-                    'shop_id'=>$member_infos->id
+                    'shop_id'=>$member_infos->id,
                 ]
             );
         });
@@ -130,28 +124,11 @@ class MemberController extends Controller
     }
 
 
-    //修改商户的状态
-    public function status(Member $member){
-        if ($member->status == 1){
-           $member->update(
-                [
-                    'status'=>'0'
-                ]
-            );
-        }else{
-            $member->update(
-                [
-                    'status'=>'1'
-                ]
-            );
-        }
-        session()->flash('success', '修改成功~');
-        return redirect()->route('member.index');
-    }
+
 
 
     //保存商户的信息
-    public function update(Request $request,ImageUploadHandler $handler){
+    public function update(Request $request,ImageUploadHandler $handler,Member $member ,Member_info $member_info){
         $this->validate($request,
             [
                 'name'=>'required|min:2|max:30',
@@ -173,17 +150,23 @@ class MemberController extends Controller
         //文件上传的保存
         $result = $handler->save($request->shop_img,'shop',0);
         if ($result){
-            $fileName = url(Storage::url($result['path']));
+                    $fileName = $result['path'];
         }else{
             $fileName = '';
         }
+        $client = App::make('aliyun-oss');
+        try{
+            $client->uploadFile('tanzong-eleb-shop','public'.$fileName,public_path($fileName));
+        }catch (OssException $e){
+            printf($e->getMessage() . "\n");
+        }
         //保存商品店主信息
-        DB::transaction(function () use ($request,$fileName) {
+        DB::transaction(function () use ($request,$fileName ,$member_info ,$member) {
 
-            Member_info::update(
+            $member_info->update(
                 [
                     'shop_name'=>$request->shop_name,
-                    'shop_img'=>$fileName,
+                    'shop_img'=>'https://tanzong-eleb-shop.oss-cn-beijing.aliyuncs.com/public'.$fileName,
                     'brand'=>$request->brand,
                     'on_time'=>$request->on_time,
                     'fengniao'=>$request->fengniao,
@@ -200,11 +183,12 @@ class MemberController extends Controller
                 ]
             );
 
-            Member::update(
+            $member->update(
                 [
                     'name'=>$request->name,
                     'status'=>'1',
                     'email'=>$request->email,
+
 
                 ]
             );
@@ -213,4 +197,24 @@ class MemberController extends Controller
         return redirect()->route('member.index');
     }
 
+
+
+//修改商户的状态
+    public function status(Member $member){
+        if ($member->status == 1){
+            $member->update(
+                [
+                    'status'=>'0'
+                ]
+            );
+        }else{
+            $member->update(
+                [
+                    'status'=>'1'
+                ]
+            );
+        }
+        session()->flash('success', '修改成功~');
+        return redirect()->route('member.index');
+    }
 }

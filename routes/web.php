@@ -30,3 +30,16 @@ Route::resource('admin','AdminController');
 Route::get('login', 'SessionsController@create')->name('login');
 Route::post('login', 'SessionsController@store')->name('login');
 Route::delete('logout', 'SessionsController@destroy')->name('logout');
+
+
+
+
+
+//oss测试
+Route::get('/oss', function()
+{
+    $client = App::make('aliyun-oss');
+    $client->putObject("tanzong-eleb-shop", "1.txt", "傻逼");
+    $result = $client->getObject("tanzong-eleb-shop", "1.txt");
+    echo $result;
+});

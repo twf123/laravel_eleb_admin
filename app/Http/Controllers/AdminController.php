@@ -4,16 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Admin;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class AdminController extends Controller
 {
+
+
+    //权限控制
+//    public function __construct()
+//    {
+//        $this->middleware('auth',[
+//            'except'=>['']
+//        ]);
+//    }
+
+
+
     //添加超级管理员
-    public function __construct()
-    {
-        $this->middleware('auth',[
-            'except'=>['']
-        ]);
-    }
     public function create(){
 
     return view('admin.create');
@@ -50,7 +58,29 @@ class AdminController extends Controller
 
     //修改密码
     public function edit(Admin $admin){
-        return view('admin.edit');
+        return view('admin.edit',compact('admin'));
+
+    }
+
+
+    //保存密码
+    public function update(Request $request ,Admin $admin){
+        $this->validate($request,[
+            'name'=>['required','min:2','max:10',Rule::unique('users')->ignore($admin->id)],
+            'password'=>'required|min:3|max:16',
+        ]);
+        if (Auth::attempt(['name'=>$request->name,'password'=>$request->password])){
+            $admin->update(['password'=>bcrypt($request->newpassword),'name'=>$request->name]);
+            //保存成功,提示并跳转
+            session()->flash('success','管理员信息修改成功!请重新登录');
+            //清除登录信息,重新登录
+            Auth::logout();
+            return redirect()->route('login');
+        }else{
+            //保存失败,提示并跳转
+            session()->flash('warning','原密码或新密码填写错误!');
+            return back()->withInput();
+        }
     }
 
 }

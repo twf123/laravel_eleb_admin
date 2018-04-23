@@ -124,6 +124,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary btn-success"> 修改商户</button>
                 {{csrf_field()}}
+                {{method_field('PUT')}}
             </form>
         </div>
     </div>
