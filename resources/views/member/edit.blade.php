@@ -1,6 +1,7 @@
 @extends('layout.default')
 @section('title','修改店铺信息')
 @section('content')
+    <link rel="stylesheet" type="text/css" href="/webuploader/webuploader.css">
     <div class="row">
         <div class="col-lg-1"></div>
         <div class="container col-lg-9" style="background-color: #eceeee">
@@ -40,10 +41,16 @@
                     </select>
                 </div>
 
+
                 <div class="form-group">
-                    <label>店铺图片</label>
-                    <input  type="file"  name="shop_img"/>
+                    <div id="uploader-demo">
+                        <!--用来存放item-->
+                        <div id="fileList" class="uploader-list"></div>
+                        <div id="filePicker">选择图片</div>
+                    </div>
                 </div>
+                <input type="hidden" name="shop_img" id="shop_img">
+                <img id="img" src="" style="height: 50px" width="50px">
 
                 <div class="form-group">
                     <label>是否品牌</label>
@@ -128,4 +135,42 @@
             </form>
         </div>
     </div>
+@stop
+@section('js')
+    <script type="text/javascript" src="/webuploader/webuploader.js"></script>
+
+    <script>
+        var uploader = WebUploader.create({
+
+            // 选完文件后，是否自动上传。
+            auto: true,
+
+            // swf文件路径
+            swf: '/webuploader/Uploader.swf',
+
+            // 文件接收服务端。
+            server: '/upload',
+            formData:{_token:"{{ csrf_token() }}" },
+
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#filePicker',
+
+            // 只允许选择图片文件。
+            accept: {
+                title: 'Images',
+                extensions: 'gif,jpg,jpeg,bmp,png',
+                mimeTypes: 'image/*'
+            }
+        });
+
+        //监听文件上传
+        uploader.on( 'uploadSuccess', function( file,response ) {
+//            $( '#'+file.id ).addClass('upload-state-done');
+            var url = response.url;
+            $("#img").attr('src',url);
+            $("#shop_img").val(response.pic)
+        });
+    </script>
+
 @stop

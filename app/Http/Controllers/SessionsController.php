@@ -27,10 +27,13 @@ class SessionsController extends Controller
             [
                 'name'=>'required',
                 'password'=>'required',
+                'captcha'=>'required|captcha'
             ],
             [
                 'name.required'=>'用户名不能为空',
                 'password.required'=>'密码不能为空',
+                'captcha.required'=>'验证码不能为空',
+                'captcha.captcha'=>'请输入正确的验证码',
             ]
         );
         if (Auth::attempt(['name' => $request->name, 'password' => $request->password],$request->has('rememberMe'))) {

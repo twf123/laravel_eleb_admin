@@ -1,6 +1,7 @@
 @extends('layout.default')
 @section('title','注册店铺')
 @section('content')
+    <link rel="stylesheet" type="text/css" href="/webuploader/webuploader.css">
     <div class="row">
         <div class="col-lg-1"></div>
         <div class="container col-lg-9" style="background-color: #eceeee">
@@ -49,7 +50,6 @@
                 </div>
                 <input type="hidden" name="shop_img" id="shop_img">
                 <img id="img" src="" style="height: 50px" width="50px">
-
 
 
                 <div class="form-group">

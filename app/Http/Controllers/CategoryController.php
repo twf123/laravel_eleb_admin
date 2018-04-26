@@ -92,7 +92,7 @@ class CategoryController extends Controller
     }
 
 
-    //删除用户
+    //删除分类
     public function destroy(Category $category)
     {
         $category->delete();

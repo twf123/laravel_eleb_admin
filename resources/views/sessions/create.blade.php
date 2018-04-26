@@ -15,6 +15,11 @@
                     <input type="checkbox" value="1" name="rememberMe" @if(old('rememberMe')) checked @endif> 记住我
                 </label>
             </div>
+            <div class="form-group">
+                <label for="exampleInputEmail1">验证码</label>
+                <input id="captcha" class="form-control" name="captcha" >
+                <img class="thumbnail captcha" src="{{ captcha_src('flat') }}" onclick="this.src='/captcha/flat?'+Math.random()" title="点击图片重新获取验证码">
+            </div>
             {{ csrf_field() }}
             <button type="submit" class="btn btn-default">登录</button>
         </form>

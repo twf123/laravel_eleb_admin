@@ -33,13 +33,8 @@ Route::delete('logout', 'SessionsController@destroy')->name('logout');
 
 
 
+//上传图片路由
+Route::post('/upload','UploaderController@upload');
 
-
-//oss测试
-Route::get('/oss', function()
-{
-    $client = App::make('aliyun-oss');
-    $client->putObject("tanzong-eleb-shop", "1.txt", "傻逼");
-    $result = $client->getObject("tanzong-eleb-shop", "1.txt");
-    echo $result;
-});
+////活动路由
+Route::resource('activity','ActivityController');

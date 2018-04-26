@@ -14,8 +14,7 @@ class UploaderController extends Controller
     public function upload(Request $request){
 
 //        dd($request->file('file'));
-        $img = $request->file('file')->store('public/shop_member');
-
+        $img = $request->file('file')->store('public/shop_admin');
 
         $client = App::make('aliyun-oss');
         try{

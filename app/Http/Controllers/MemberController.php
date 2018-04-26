@@ -26,7 +26,7 @@ class MemberController extends Controller
     }
 
     //保存商户信息
-    public function store(Request $request,ImageUploadHandler $handler){
+    public function store(Request $request){
 //        验证用户
 
       $this->validate($request,
@@ -114,8 +114,6 @@ class MemberController extends Controller
         return view('member.edit',compact('member','cats'));
     }
 
-
-
     //删除商户
     public function destroy(Member $member)
     {
@@ -123,12 +121,8 @@ class MemberController extends Controller
         echo 'success';
     }
 
-
-
-
-
     //保存商户的信息
-    public function update(Request $request,ImageUploadHandler $handler,Member $member ,Member_info $member_info){
+    public function update(Request $request,Member $member ,Member_info $member_info){
         $this->validate($request,
             [
                 'name'=>'required|min:2|max:30',
@@ -147,57 +141,71 @@ class MemberController extends Controller
 
             ]);
 
-        //文件上传的保存
-        $result = $handler->save($request->shop_img,'shop',0);
-        if ($result){
-                    $fileName = $result['path'];
-        }else{
-            $fileName = '';
-        }
-        $client = App::make('aliyun-oss');
-        try{
-            $client->uploadFile('tanzong-eleb-shop','public'.$fileName,public_path($fileName));
-        }catch (OssException $e){
-            printf($e->getMessage() . "\n");
-        }
         //保存商品店主信息
-        DB::transaction(function () use ($request,$fileName ,$member_info ,$member) {
+        DB::transaction(function () use ($request ,$member_info ,$member) {
+            if ($request->shop_img){
+                $member_info->update(
+                    [
+                        'shop_name'=>$request->shop_name,
+                        'shop_img'=>'https://tanzong-eleb-shop.oss-cn-beijing.aliyuncs.com/public'.$request->shop_img,
+                        'brand'=>$request->brand,
+                        'on_time'=>$request->on_time,
+                        'fengniao'=>$request->fengniao,
+                        'bao'=>$request->bao,
+                        'piao'=>$request->piao,
+                        'zhun'=>$request->zhun,
+                        'start_send'=>$request->start_send,
+                        'send_cost'=>$request->send_cost,
+                        'notice'=>$request->notice,
+                        'discount'=>$request->discount,
+                        'distance'=>$request->distance,
+                        'estimate_time'=>$request->estimate_time,
+                        'categories_id'=>$request->categories_id
+                    ]
+                );
 
-            $member_info->update(
-                [
-                    'shop_name'=>$request->shop_name,
-                    'shop_img'=>'https://tanzong-eleb-shop.oss-cn-beijing.aliyuncs.com/public'.$fileName,
-                    'brand'=>$request->brand,
-                    'on_time'=>$request->on_time,
-                    'fengniao'=>$request->fengniao,
-                    'bao'=>$request->bao,
-                    'piao'=>$request->piao,
-                    'zhun'=>$request->zhun,
-                    'start_send'=>$request->start_send,
-                    'send_cost'=>$request->send_cost,
-                    'notice'=>$request->notice,
-                    'discount'=>$request->discount,
-                    'distance'=>$request->distance,
-                    'estimate_time'=>$request->estimate_time,
-                    'categories_id'=>$request->categories_id
-                ]
-            );
-
-            $member->update(
-                [
-                    'name'=>$request->name,
-                    'status'=>'1',
-                    'email'=>$request->email,
+                $member->update(
+                    [
+                        'name'=>$request->name,
+                        'status'=>'1',
+                        'email'=>$request->email,
 
 
-                ]
-            );
+                    ]
+                );
+            }else{
+                $member_info->update(
+                    [
+                        'shop_name'=>$request->shop_name,
+                        'brand'=>$request->brand,
+                        'on_time'=>$request->on_time,
+                        'fengniao'=>$request->fengniao,
+                        'bao'=>$request->bao,
+                        'piao'=>$request->piao,
+                        'zhun'=>$request->zhun,
+                        'start_send'=>$request->start_send,
+                        'send_cost'=>$request->send_cost,
+                        'notice'=>$request->notice,
+                        'discount'=>$request->discount,
+                        'distance'=>$request->distance,
+                        'estimate_time'=>$request->estimate_time,
+                        'categories_id'=>$request->categories_id
+                    ]
+                );
+
+                $member->update(
+                    [
+                        'name'=>$request->name,
+                        'status'=>'1',
+                        'email'=>$request->email,
+                    ]
+                );
+            }
+
         });
         session()->flash('success', '修改成功~');
         return redirect()->route('member.index');
     }
-
-
 
 //修改商户的状态
     public function status(Member $member){

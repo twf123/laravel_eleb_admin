@@ -31,6 +31,13 @@
                         <li><a href="{{ route('category.index') }}">查看商家分类</a></li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">添加活动<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('activity.create') }}">添加活动</a></li>
+                        <li><a href="{{ route('activity.index') }}">查看活动</a></li>
+                    </ul>
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @guest
