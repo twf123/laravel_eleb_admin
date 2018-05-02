@@ -91,7 +91,7 @@ class MemberController extends Controller
     //查看所有商户的信息
     public function index(Request $request)
     {
-        $members = Member::all();
+
 //检查是否有keywords参数,有,需要搜索,没有 不需要搜索
         $keywords = $request->keywords;
         if ($keywords) {
