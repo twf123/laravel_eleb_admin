@@ -29,7 +29,7 @@ class CreateFoodsTable extends Migration
             $table->foreign('dishes_id')->references('id')->on('dishes');//外键
 //添加和商家的外键
             $table->integer('member_info_id')->unsigned();//商品ID
-            $table->foreign('member_info_id')->references('id')->on('member_info');//外键
+            $table->foreign('member_info_id')->references('id')->on('member_infos');//外键
         });
     }
 
