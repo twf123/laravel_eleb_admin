@@ -38,6 +38,69 @@
                         <li><a href="{{ route('activity.index') }}">查看活动</a></li>
                     </ul>
                 </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">抽奖管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('events.index') }}">显示所有的抽奖活动</a></li>
+                        <li><a href="{{ route('events.create') }}">添加抽奖活动</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">奖品管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('event_prize.index') }}">查看所有的奖品</a></li>
+                        <li><a href="{{ route('event_prize.create') }}">添加奖品</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">查看所有会员<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ route('user.index') }}">查看所有会员</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">菜品销量<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{route('stores_xl') }}">查看销量</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">权限管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{route('permission.create') }}">添加权限</a></li>
+                        <li><a href="{{route('permission.index') }}">查看权限</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">角色管理<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{route('role.create') }}">添加角色</a></li>
+                        <li><a href="{{route('role.index') }}">查看角色</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">添加管理员<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{route('admin.create') }}">添加管理员</a></li>
+                        <li><a href="{{route('admin.index') }}">查看所有管理员</a></li>
+                    </ul>
+                </li>
+                <ul class="nav navbar-nav">
+                    {!! \App\Menu::getMenu() !!}
+                    {{--@foreach(\App\Menu::getMenu() as $row)--}}
+                        {{--<li class="dropdown">--}}
+                            {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ $row->name }} <span class="caret"></span></a>--}}
+                            {{--<ul class="dropdown-menu">--}}
+                                {{--@foreach($row->child as $val)--}}
+                                    {{--@if(\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->can($val->routing))--}}
+                                    {{--<li><a href="{{route($val->routing)}}">{{ $val->name }}</a></li>--}}
+                                    {{--@endif--}}
+                                {{--@endforeach--}}
+                            {{--</ul>--}}
+                        {{--</li>--}}
+                    {{--@endforeach--}}
+                </ul>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 @guest

@@ -20,7 +20,6 @@
                 <label>新密码</label>
                 <input type="password" class="form-control" name="newpassword" placeholder="确认密码">
                 </div>
-
                 <div class="form-group">
                     <label for="exampleInputEmail1">验证码</label>
                     <input id="captcha" class="form-control" name="captcha" >

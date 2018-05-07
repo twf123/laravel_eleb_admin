@@ -19,7 +19,13 @@
                     <label>确认密码</label>
                     <input type="password" class="form-control" name="password_confirmation" placeholder="确认密码">
                 </div>
-
+                <div class="form-group">
+                    @foreach($roles as $role)
+                        <label class="checkbox-inline" >
+                            <input type="checkbox" id="inlineCheckbox1"  name="role_id[]" value="{{ $role->id }}">{{ $role->name }}
+                        </label>
+                    @endforeach
+                </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">验证码</label>
                     <input id="captcha" class="form-control" name="captcha" >

@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 class SessionsController extends Controller
 {
     //登录
+
     public function create()
     {
         //如果用户已登录,则跳转至首页

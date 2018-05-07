@@ -14,12 +14,12 @@ use OSS\Core\OssException;
 class MemberController extends Controller
 {
     //添加商户信息
-//    public function __construct()
-//    {
-//        $this->middleware('auth',[
-//            'except'=>[]
-//        ]);
-//    }
+    public function __construct()
+    {
+        $this->middleware('auth',[
+            'except'=>[]
+        ]);
+    }
     public function create(){
         $cats  =  Category::all();
         return view('member.create',compact('cats'));
@@ -222,6 +222,13 @@ class MemberController extends Controller
                 ]
             );
         }
+        $m = DB::table('members')->where('id','=',$member->id)->first();
+        if ($m->status == 1){
+        $email = $m->email;
+        $name = $m->name;
+            Member::email($email,$name);
+        }
+
         session()->flash('success', '修改成功~');
         return redirect()->route('member.index');
     }
