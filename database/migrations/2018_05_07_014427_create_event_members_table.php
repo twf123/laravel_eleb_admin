@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateEventMembersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('event_members', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username');
-            $table->string('tel');
-            $table->integer('is_status')->default(1);
-            $table->string('password');
-            $table->rememberToken();
+            $table->integer('events_id');//活动ID
+            $table->integer('member_id');//参加商户的ID
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('event_members');
     }
 }

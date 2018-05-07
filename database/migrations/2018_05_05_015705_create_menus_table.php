@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateMenusTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
+        Schema::create('menus', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('username');
-            $table->string('tel');
-            $table->integer('is_status')->default(1);
-            $table->string('password');
-            $table->rememberToken();
+            $table->string('name');
+            $table->integer('parent_id');//父级
+            $table->string('routing');//路由
+            $table->integer('sorting');//排序
             $table->timestamps();
         });
     }
@@ -32,6 +30,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('menus');
     }
 }
