@@ -15,8 +15,7 @@ class AddShopIdToMembersTable extends Migration
     {
         Schema::table('members', function (Blueprint $table) {
 
-            $table->integer('shop_id');
-
+            $table->integer('shop_id')->unsigned();//用户id;
             $table->foreign('shop_id')->references('id')->on('member_infos');
         });
 
