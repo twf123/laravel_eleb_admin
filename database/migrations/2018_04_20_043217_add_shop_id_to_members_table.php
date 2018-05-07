@@ -17,8 +17,7 @@ class AddShopIdToMembersTable extends Migration
 
             $table->integer('shop_id');
 
-            $table->foreign('shop_id')->references('id')->on('member_infos
-            ');
+            $table->foreign('shop_id')->references('id')->on('member_infos');
         });
 
     }
