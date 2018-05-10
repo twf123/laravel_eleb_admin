@@ -10,13 +10,13 @@ use OSS\Core\OssException;
 class CategoryController extends Controller
 {
 
-    //权限
-    public function __construct()
-    {
-        $this->middleware('auth',[
-            'except'=>[]
-        ]);
-    }
+//    //权限
+//    public function __construct()
+//    {
+//        $this->middleware('auth',[
+//            'except'=>[]
+//        ]);
+//    }
     //添加商户分类
     public function create(){
         return view('category.create');
